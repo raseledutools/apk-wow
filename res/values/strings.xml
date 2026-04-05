@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Focus Hero</string>
+    <string name="accessibility_desc">এই পারমিশনটি অ্যাপ ব্লক করার জন্য প্রয়োজন। এটি ছাড়া Focus Hero কাজ করতে পারবে না।</string>
+</resources>
