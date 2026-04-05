@@ -1,4 +1,4 @@
-name: Android Final Build
+name: Android Final Build Fixed
 
 on:
   push:
@@ -19,18 +19,17 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
-    # এখানে আমরা নির্দিষ্ট করে দিচ্ছি যেন ঠিক Gradle 8.2 ভার্সনই ব্যবহার হয়
-    - name: Setup Correct Gradle Version
-      run: gradle wrapper --gradle-version 8.2
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    # গিটহাবের ডিফল্ট কমান্ডের বদলে এই অ্যাকশনটি ব্যবহার করুন
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: 8.2
 
     - name: Build APK (Debug)
-      run: ./gradlew assembleDebug
+      run: chmod +x gradlew && ./gradlew assembleDebug --stacktrace
 
     - name: Upload Finished APK
       uses: actions/upload-artifact@v4
       with:
-        name: focus-hero-app
+        name: focus-hero-apk
         path: build/outputs/apk/debug/*.apk
