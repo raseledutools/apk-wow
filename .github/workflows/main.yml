@@ -1,26 +1,36 @@
-name: Build APK Custom Structure
+name: Android Final Build
 
-on: [push]
+on:
+  push:
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: gradle
 
-    # যেহেতু সব ফাইল মেইন ডাইরেক্টরিতে, আমরা সরাসরি gradle রান করব
-    - name: Build APK
-      run: |
-        gradle wrapper
-        ./gradlew assembleDebug
+    # এখানে আমরা নির্দিষ্ট করে দিচ্ছি যেন ঠিক Gradle 8.2 ভার্সনই ব্যবহার হয়
+    - name: Setup Correct Gradle Version
+      run: gradle wrapper --gradle-version 8.2
 
-    - name: Upload APK
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build APK (Debug)
+      run: ./gradlew assembleDebug
+
+    - name: Upload Finished APK
       uses: actions/upload-artifact@v4
       with:
-        name: stay-focused-apk
+        name: focus-hero-app
         path: build/outputs/apk/debug/*.apk
